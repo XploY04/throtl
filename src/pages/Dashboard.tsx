@@ -1,6 +1,5 @@
 // Filename: src/pages/Dashboard.tsx
 
-import React from "react";
 import { motion } from "framer-motion";
 
 // Import your new components and hook
@@ -11,23 +10,46 @@ import { ConnectedClientsList } from "../components/dashboard/ConnectedClientLis
 import { BandwidthDonutChart } from "../components/dashboard/BandwidthDonutChart";
 import { EventsLog } from "../components/dashboard/EventsLog";
 import { useNetworkData, THRESHOLD_BPS } from "../hooks/useNetworkData";
+import { formatBandwidth } from "../services/api";
 
 export function Dashboard() {
   // All the complex logic is now hidden inside this single hook
-  const { clients, chartData, events, selectedClientIp, setSelectedClientIp } = useNetworkData();
+  const { 
+    clients, 
+    chartData, 
+    events, 
+    selectedClientIp, 
+    setSelectedClientIp,
+    globalStats,
+    isConnected,
+    error,
+    throttleDevice,
+    unthrottleDevice
+  } = useNetworkData();
 
   const selectedClient = clients.find(c => c.ip === selectedClientIp);
-  const totalBandwidthBps = clients.reduce((sum, client) => sum + client.liveDownload, 0);
-  
-  const formatBps = (bps: number) => {
-    if (bps >= 1_000_000_000) return `${(bps / 1_000_000_000).toFixed(2)} Gbps`;
-    if (bps >= 1_000_000) return `${(bps / 1_000_000).toFixed(2)} Mbps`;
-    return `${(bps / 1_000).toFixed(1)} Kbps`;
-  };
+  const totalBandwidthBps = globalStats.totalDownload;
 
   return (
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
-      <Header />
+      <Header 
+        isConnected={isConnected} 
+        error={error}
+        onRefresh={() => window.location.reload()}
+      />
+
+      {/* Connection Status */}
+      {error && (
+        <div className="bg-red-900/20 border border-red-700 rounded-sm p-4">
+          <p className="text-red-400 text-sm">⚠️ {error}</p>
+        </div>
+      )}
+
+      {!isConnected && !error && (
+        <div className="bg-yellow-900/20 border border-yellow-700 rounded-sm p-4">
+          <p className="text-yellow-400 text-sm">🔄 Connecting to NetGuardian backend...</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <section className="lg:col-span-2 space-y-8">
@@ -53,9 +75,21 @@ export function Dashboard() {
             </motion.div>
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <StatCard title="Bandwidth" value={<>{formatBps(totalBandwidthBps)}</>} hint="Total throughput" />
-              <StatCard title="Active Devices" value={clients.length} hint="Currently on network" />
-              <StatCard title="Avg Latency" value={<>24 ms</>} hint="Stable" />
+              <StatCard 
+                title="Download" 
+                value={formatBandwidth(totalBandwidthBps)} 
+                hint="Total network download" 
+              />
+              <StatCard 
+                title="Upload" 
+                value={formatBandwidth(globalStats.totalUpload)} 
+                hint="Total network upload" 
+              />
+              <StatCard 
+                title="Active Devices" 
+                value={clients.length} 
+                hint="Currently on network" 
+              />
             </div>
           </div>
           <EventsLog events={events} />
@@ -67,6 +101,8 @@ export function Dashboard() {
             clients={clients} 
             onClientSelect={setSelectedClientIp}
             selectedClientIp={selectedClientIp}
+            onThrottle={throttleDevice}
+            onUnthrottle={unthrottleDevice}
           />
         </aside>
       </div>
