@@ -148,11 +148,6 @@ export function Navbar(): React.JSX.Element {
   // ---------- compact detection ----------
   const compact = !isLanding;
 
-  // route active flags (keep for aria-current)
-  const isDashboard = location.pathname === "/dashboard";
-  const isContact = location.pathname === "/contact";
-  const isAbout = location.pathname === "/about";
-
   const containerClass =
     "relative flex-shrink-0 min-w-[180px] md:min-w-[300px] lg:min-w-[420px] h-auto";
 
@@ -244,69 +239,60 @@ export function Navbar(): React.JSX.Element {
             style={{ position: "relative", width: "100%", height: "100%" }}
           >
             {NAV_ITEMS.map((item, i) => {
-              const xRow = -xOffsets[i];
-              const yStack = yPositions[i] ?? i * 56;
+  const xRow = -xOffsets[i];
+  const yStack = yPositions[i] ?? i * 56;
+  const isActive = location.pathname === item.to; // true when link is current page
 
-              return (
-                <motion.div
-                  key={item.to}
-                  ref={(el) => {
-                    // <-- IMPORTANT: use a block body so the callback returns void
-                    itemRefs.current[i] = el;
-                  }}
-                  initial={false}
-                  animate={{
-                    x: stacked && isLanding ? 0 : xRow,
-                    // animate top to '50%' for row (so we can center with y '-50%'),
-                    // and to 0 for stacked where we use numeric y offsets.
-                    top: stacked && isLanding ? 0 : "50%",
-                    // when row: use '-50%' to vertically center the item (with top:50%),
-                    // when stacked: use the numeric yStack (px) from measurements.
-                    y: stacked && isLanding ? yStack : "-50%",
-                    opacity: 1,
-                  }}
-                  transition={springTransition}
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    display: "block",
-                    transformOrigin: "right center",
-                    willChange: "transform, opacity",
-                  }}
-                  className="pointer-events-auto"
-                >
-                  <Link
-                    to={item.to}
-                    className="text-white transition-colors"
-                    aria-current={
-                      item.to === "/dashboard"
-                        ? isDashboard
-                          ? "page"
-                          : undefined
-                        : item.to === "/contact"
-                        ? isContact
-                          ? "page"
-                          : undefined
-                        : item.to === "/about"
-                        ? isAbout
-                          ? "page"
-                          : undefined
-                        : undefined
-                    }
-                  >
-                    <div
-                      className={`${
-                        compact
-                          ? "mx-2 py-2 px-2 text-sm md:mx-5 md:py-3 md:px-3 md:text-lg"
-                          : "mx-2 py-3 px-3 text-lg hover:underline hover:scale-[1.01] hover:decoration-dashed hover:decoration-2 hover:decoration-current underline-offset-5 transition-all md:mx-5 md:py-6 md:px-6 md:text-2xl backdrop-blur-sm"
-                      } whitespace-nowrap`}
-                    >
-                      {item.label}
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
+  // compact small style — only add hover effects when compact AND this is NOT the active page
+  const compactBase = "mx-2 py-2 px-2 text-sm md:mx-5 md:py-3 md:px-3 md:text-lg";
+  const compactHover =
+    compact && !isActive
+      ? " hover:underline hover:scale-[1.01] hover:decoration-dashed hover:decoration-2 hover:decoration-current underline-offset-5 transition-all"
+      : "";
+  const compactClass = `${compactBase}${compactHover}`;
+
+  // full (non-compact) style — keep your existing hover treatment
+  const fullClass =
+    "mx-2 py-3 px-3 text-lg hover:underline hover:scale-[1.01] hover:decoration-dashed hover:decoration-2 hover:decoration-current underline-offset-5 transition-all md:mx-5 md:py-6 md:px-6 md:text-2xl backdrop-blur-sm";
+
+  const linkDivClass = compact ? compactClass : fullClass;
+
+  return (
+    <motion.div
+      key={item.to}
+      ref={(el) => {
+        itemRefs.current[i] = el;
+      }}
+      initial={false}
+      animate={{
+        x: stacked && isLanding ? 0 : xRow,
+        top: stacked && isLanding ? 0 : "50%",
+        y: stacked && isLanding ? yStack : "-50%",
+        opacity: 1,
+      }}
+      transition={springTransition}
+      style={{
+        position: "absolute",
+        right: 0,
+        display: "block",
+        transformOrigin: "right center",
+        willChange: "transform, opacity",
+      }}
+      className="pointer-events-auto"
+    >
+      <Link
+        to={item.to}
+        className="text-white transition-colors"
+        aria-current={isActive ? "page" : undefined}
+      >
+        <div className={`${linkDivClass} whitespace-nowrap`}>
+          {item.label}
+        </div>
+      </Link>
+    </motion.div>
+  );
+})}
+
           </motion.div>
         </div>
       </motion.div>
