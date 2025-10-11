@@ -1,7 +1,7 @@
 // src/App.tsx
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout'; // Import Layout
-import { LandingPage } from './pages/LandingPage';
+import LandingPage  from './pages/LandingPage';
 import { Dashboard } from './pages/Dashboard';
 
 function App() {
