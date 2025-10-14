@@ -20,7 +20,8 @@ export function BandwidthDonutChart({ clients }: { clients: Client[] }) {
       <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={60} fill="#8884d8" paddingAngle={5}>
-            {data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+            {/* CHANGED 'entry' to '_' because it's unused */}
+            {data.map((_, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
           </Pie>
           <Legend iconSize={10} layout="vertical" verticalAlign="middle" align="right" />
         </PieChart>

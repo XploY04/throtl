@@ -1,7 +1,6 @@
-import React from "react";
+
 import { motion } from "framer-motion";
 
-// Team member data
 const teamMembers = [
   {
     name: "Abhay Singh",
@@ -69,12 +68,10 @@ export function TeamGrid() {
             <span className="absolute right-3 top-1 bg-white h-2 w-2"></span>
             </div>
 
-            {/* Name */}
             <h3 className="text-lg font-semibold text-neutral-200">
               {member.name}
             </h3>
 
-            {/* GitHub Link */}
             <motion.a
               href={member.github}
               target="_blank"
