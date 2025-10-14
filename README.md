@@ -6,6 +6,9 @@ This guide will help you turn your Linux laptop into a Wi-Fi hotspot where you c
 
 ---
 
+## Live frontend <a href="https://throtl.vercel.app" target="_blank">here </a>
+
+
 ## What You Need
 
 - A Linux laptop (Ubuntu 20.04 or newer)
