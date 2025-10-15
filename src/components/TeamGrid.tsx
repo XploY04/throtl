@@ -6,25 +6,25 @@ const teamMembers = [
     name: "Abhay Singh",
     photo: "https://avatars.githubusercontent.com/u/159780692?v=4",
     github: "https://github.com/abhaydesu",
-    linkedin: "https://www.linkedin.com/in/abhaydesu/"
+    link: "https://www.abhaydesu.dev"
   },
   {
     name: "Kushagra Shukla",
     photo: "https://avatars.githubusercontent.com/u/178865275?v=4",
     github: "https://github.com/kushu30",
-    linkedin: "https://www.linkedin.com/in/kushu30/"
+    link: "https://www.linkedin.com/in/kushu30/"
   },
   {
     name: "Yash Aggarwal",
     photo: "https://avatars.githubusercontent.com/u/134356616?v=4",
     github: "https://github.com/XploY04",
-    linkedin: "https://www.linkedin.com/in/xploy04/"
+    link: "https://www.linkedin.com/in/xploy04/"
   },
   {
     name: "Pushti Sonawala",
     photo: "https://avatars.githubusercontent.com/u/168925733?v=4",
     github: "https://github.com/pushtisonawala",
-    linkedin: "https://www.linkedin.com/in/pushti-sonawala-b0079b27a/"
+    link: "https://www.linkedin.com/in/pushti-sonawala-b0079b27a/"
   },
 ];
 
@@ -53,7 +53,7 @@ export function TeamGrid() {
           >
             {/* Image */}
             <div className="relative mb-2">
-            <a target="_blank" href={member.linkedin}>
+            <a target="_blank" href={member.link}>
             <img
               src={member.photo}
               alt={`${member.name}'s profile photo`}
