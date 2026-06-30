@@ -1,0 +1,24 @@
+default_profile: 'hostel'
+profiles:
+  home:
+    THRESH_BYTES_PER_SEC: 500000
+    DEBOUNCE_SECS: 10
+    UNTHROTTLE_HOLD: 60
+    RATE: '2mbit'
+    AUTO_THROTTLE: false   # Set to true to apply tc rules automatically
+  hostel:
+    THRESH_BYTES_PER_SEC: 200000
+    DEBOUNCE_SECS: 4
+    UNTHROTTLE_HOLD: 20
+    RATE: '1mbit'
+    AUTO_THROTTLE: false   # Set to true to apply tc rules automatically
+
+GLOBAL:
+  TICK_SEC: 1
+  WINDOW_SIZE: 10
+  WIFI_IF: 'wlp3s0'
+  UP_IF: 'enx66a97d4f8e6c'
+  SUBNET: '10.42.0.0/24'
+  REDIS_HOST: '127.0.0.1'
+  REDIS_PORT: 6379
+  # AUTO_THROTTLE: false  # Global default; overridden per-profile

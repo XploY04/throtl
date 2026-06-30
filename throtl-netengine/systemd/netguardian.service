@@ -1,0 +1,18 @@
+[Unit]
+Description=NetGuardian engine (Redis-based)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/kushagra/netguardian
+Environment=NG_PROFILE=hostel
+Environment=REDIS_HOST=10.42.0.137
+Environment=REDIS_PORT=6379
+ExecStart=/home/kushagra/netguardian/venv/bin/python3 /home/kushagra/netguardian/src/engine.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
